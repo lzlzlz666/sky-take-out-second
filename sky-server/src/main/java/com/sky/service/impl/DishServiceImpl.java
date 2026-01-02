@@ -90,9 +90,64 @@ public class DishServiceImpl implements DishService {
         }
 
         // 删除菜品后，关联的口味数据也需要删除掉
-        for (Long id : ids) {
+        /*for (Long id : ids) {
             dishMapper.deleteById(id);
             dishFlavorMapper.deletByDishId(id);
-        }
+        }*/
+        dishMapper.deleteByIds(ids);
+        dishFlavorMapper.deleteByDishIds(ids);
     }
+
+    /**
+     * 根据id查询商品和风味
+     * @param id
+     */
+    public DishVO getDishByIdwithFlavor(Long id) {
+        Dish dish = dishMapper.getById(id);
+        List<DishFlavor> dishFlavorList = dishFlavorMapper.getByDishId(id);
+
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish , dishVO);
+        dishVO.setFlavors(dishFlavorList);
+
+        return dishVO;
+    }
+
+    /**
+     * 修改菜品
+     * @param dishDTO
+     */
+    @Transactional
+    public void update(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO , dish);
+
+        dishMapper.update(dish);
+
+        dishFlavorMapper.deletByDishId(dishDTO.getId());
+
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors != null && !flavors.isEmpty()) {
+            flavors.forEach(dishFlavor ->{
+                dishFlavor.setDishId(dishDTO.getId());
+            });
+            // 新增n个Flavor信息
+            dishFlavorMapper.insertBatch(flavors);
+        }
+
+    }
+
+    /**
+     * 菜品的起售与停售修改
+     * @param status
+     * @param id
+     */
+    public void updateStatus(Integer status, Long id) {
+        Dish dish = Dish.builder()
+                    .status(status)
+                    .id(id)
+                    .build();
+        dishMapper.updateSaleOrNotSale(dish);
+    }
+
 }
