@@ -19,3 +19,10 @@ sky:
   wechat:
     appid: ${WECHAT_APPID}
     secret: ${WECHAT_SECRET}
+  baidu:
+    map:
+      ak: ${BAIDU_MAP_AK}
+      address: 温州市鹿城区嘉鸿花园12幢1606
+      urls:
+        geocoding: https://api.map.baidu.com/geocoding/v3/?
+        riding: https://api.map.baidu.com/directionlite/v1/riding?

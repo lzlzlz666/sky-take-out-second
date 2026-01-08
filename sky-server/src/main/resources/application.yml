@@ -53,4 +53,10 @@ sky:
   wechat:
     appid: ${sky.wechat.appid}
     secret: ${sky.wechat.secret}
-
+  searchhttpak:
+    map:
+      ak: ${sky.searchhttpak.map.ak}
+      address: ${sky.searchhttpak.map.address}
+      url:
+        geocoding: ${sky.searchhttpak.map.url.geocoding}
+        riding: ${sky.searchhttpak.map.url.riding}
